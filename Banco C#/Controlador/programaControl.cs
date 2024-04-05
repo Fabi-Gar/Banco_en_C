@@ -44,10 +44,19 @@ namespace Banco_C_.Controlador
             vistaDepositos.btnBuscar.Click += clickBoton;
             vistaDepositos.btnDepositar.Click += clickBoton;
 
+            vistaPrincipal.FormClosing += VistaMenu_FormClosing;
+
             //Muestra los forms principales al momento de cargar el programa
             vistaPrincipal.Show();
             vistaLogin.ShowDialog();
 
+        }
+
+
+        // Cierra la aplicación completamente cuando se cierre el formulario VistaMenu
+        private void VistaMenu_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Application.Exit();
         }
 
         //Este metodo es el que obtiene la informacion de que boton se presiona
@@ -76,6 +85,10 @@ namespace Banco_C_.Controlador
 
             if (sender == vistaPrincipal.btnAgregar)
             {
+                if (vistaAgregarCuentas == null || vistaAgregarCuentas.IsDisposed)
+                {
+                    vistaAgregarCuentas = new frmAgregarCuentas();
+                }
                 vistaAgregarCuentas.Show();
                 modeloTablas datos = new modeloTablas();
                 DataTable dataTable = datos.TablaCuentas();
@@ -84,6 +97,11 @@ namespace Banco_C_.Controlador
 
             if (sender == vistaPrincipal.btnDepositos)
             {
+                if (vistaDepositos == null || vistaDepositos.IsDisposed)
+                {
+                    vistaAgregarCuentas = new frmDepositos();
+                }
+
                 vistaDepositos.Show();
             }
 
@@ -119,14 +137,12 @@ namespace Banco_C_.Controlador
 
             if (sender == vistaDepositos.btnDepositar)
             {
-                DateTime fechaSeleccionada = vistaDepositos.fechaDepositos.Value;
-                string fechaSQL = fechaSeleccionada.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
-
+                
 
                 DialogResult result = MessageBox.Show("¿Quieres agregar un nuevo deposito?", "Confirmación", MessageBoxButtons.YesNo);
                 if (result == DialogResult.Yes)
                 {
-                    sqlProcesos.realizarDeposito(vistaDepositos.Text, fechaSQL, vistaDepositos.txtSaldoADepositar.Text);
+                    sqlProcesos.realizarDeposito(vistaDepositos.Text, vistaDepositos.fechaDepositos.Value, vistaDepositos.txtSaldoADepositar.Text);
                     modeloTablas datos = new modeloTablas();
                     DataTable dataTable = datos.TablaDepositos(vistaDepositos.txtNumCuenta.Text);
                     vistaDepositos.dtDepositos.DataSource = dataTable;

@@ -37,7 +37,7 @@ namespace Banco_C_.Modelo
             }
         }
 
-        public static void realizarDeposito(string dato1, string dato2, string dato3)
+        public static void realizarDeposito(string dato1, date dato2, string dato3)
         {
             try
             {
@@ -48,9 +48,9 @@ namespace Banco_C_.Modelo
                 cmd.CommandText = "Depositar";
                 cmd.Connection = Miconexion.conexion;
 
-                cmd.Parameters.Add(new SqlParameter("numCuenta", dato1));
-                cmd.Parameters.Add(new SqlParameter("fechaDeposito", dato2));
-                cmd.Parameters.Add(new SqlParameter("cantidad", dato3));
+                cmd.Parameters.Add(new SqlParameter("@numCuenta", dato1));
+                cmd.Parameters.Add(new SqlParameter("@fechaDeposito", dato2));
+                cmd.Parameters.Add(new SqlParameter("@cantidad", dato3));
 
                 cmd.ExecuteNonQuery();
                 MessageBox.Show("Registro agregado exitosamente");
